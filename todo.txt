@@ -1,0 +1,9 @@
+> Backend Stuff
+>> fix async cludginess
+>> change retrieveCertDetails to return content that can be consumed for front-end use
+>> Get full list of allianz endpoints
+>> implement fs to save & update all retrieved cert details to domains.json
+> build front end
+>> grid to display cert details, default sort on "valid to" property
+>> Button to refresh cert details
+>> form to add new sites
