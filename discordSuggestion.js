@@ -51,20 +51,33 @@ https.get('https://google.com', (res) => {
 //         console.log(`-------------------------------- fetch response ----------------------------------------`)
 //         console.log(res);
 //     })
-    
 
-// async function allTheCerts(domainList) {
-//     let fetchingPromises = []
+async function getPeerCert(resSocket) {
+    let cert = await resSocket.getPeerCertificate();
+    console.log
+    return cert;
+}
+
+async function getSocket(domain) {
+    https.get(domain, async (res) => {
+        resSocket = await getPeerCert(res.socket);
+        console.log(resSocket);
+        return resSocket
+        });
+}
+
+async function allTheCerts(domainList) {
+    let fetchingPromises = []
   
-//     domainList.forEach((site) => {
-//       fetchingPromises.push(
-//         fetch(site.domain)
-//             .then(async res => await JSON.stringify(res.text()))
-//       )
-//     })
+    domainList.forEach((site) => {
+      fetchingPromises.push(
+        fetch(site.domain)
+            .then(async res => await JSON.stringify(res.text()))
+      )
+    })
   
-//     return await Promise.allSettled(fetchingPromises)
-// }
+    return await Promise.allSettled(fetchingPromises)
+}
 
 // async function allTheCerts(domainList) {
 //     let fetchingPromises = []
@@ -80,11 +93,11 @@ https.get('https://google.com', (res) => {
 //     return await Promise.allSettled(fetchingPromises)
 // }
   
-// // get all the certs
-// (async () => {
-//     let certLog = await allTheCerts(domainList)
-//     console.log('should have all the certs', certLog)
-// })()
+// get all the certs
+(async () => {
+    let certLog = await allTheCerts(domainList)
+    console.log('should have all the certs', certLog)
+})()
 
 
 app.get('/api/getCerts', (req, res) => {

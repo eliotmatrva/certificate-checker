@@ -43,7 +43,7 @@ getAllCertDetails();
 
 async function getPeerCert(resSocket) {
     let cert = await resSocket.getPeerCertificate();
-    console.log
+    console.log(cert);
     return cert;
 }
 
