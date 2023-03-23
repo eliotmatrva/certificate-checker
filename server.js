@@ -1,5 +1,5 @@
 const https = require("https");
-const fetch = require("isomorphic-fetch");
+//const fetch = require("isomorphic-fetch");
 // const sslCertificate = require('get-ssl-certificate');
 const express = require('express');
 const app = express();
@@ -47,40 +47,64 @@ async function getPeerCert(resSocket) {
     return cert;
 }
 
-async function getSocket(domain) {
-    https.get(domain, async (res) => {
-        resSocket = await getPeerCert(res.socket);
-        console.log(resSocket);
-        return resSocket
-        });
+async function getCert(domain) {
+    return new Promise((resolve) => {
+        let data ='';
+
+        https.get(domain, res => {
+            res.on('data', chunk => { data += chunk});
+            res.on('end', () => {
+                resolve(res.socket.getPeerCertificate());
+            })
+        })
+    })
 }
 
+async function extractCertDetails(domain){
+    return await getCert(domain);
+    //console.log(JSON.stringify(cert.valid_to));
+    //return cert;
+}
+    // let theResSocket = (async () => {
+    //     https.get(domain, async (res) => {
+    //         let resSocket = await getPeerCert(res.socket);
+    //         console.log(resSocket);
+    //         // return resSocket
+    //     });
+    // })();
+    // return theResSocket;
 
 async function getAllCerts(){
-    let certArray = ['THIS IS CERTARRAYYYYYYYYYYY!'];
-    let i = domainList.length - 1;
-    console.log(`--------START! i = ${i} -----------`);
-    while (i > -1) {
-        console.log(`first domain is ${domainList[i].name} | ${domainList[i].domain}`)
-        let cert = await getSocket(domainList[i].domain);
-        //certArray.push(cert);
-        console.log(cert);
-        i--;
-    } 
-    console.log(`--------END! i = ${i} -----------`)
-    //console.log(certArray);
-    //return certArray;        
+    let allCerts = [];
+    for await (const domain of domainList) {
+        let thisCert = await getCert(domain.domain);
+        allCerts.push(thisCert);
+    }
+    console.log(allCerts);
+    return allCerts;
 }
-
-
-getAllCerts();
+    
+//getAllCerts();
 
 app.get('/api/helloWorld', (req, res) => {
     res.send(`<div> Welcome to your barebones Node App</div>`);
 })
 
-app.get('/api/getCerts', (req, res) => {
-    res.send()
+app.get('/api/allCerts', async (req, res) => {
+    let payload = await getAllCerts();
+    console.log(payload);
+    res.send(JSON.stringify(payload));
+})
+
+app.get('/api/getCerts', async (req, res) => {
+    let cert = await getCert('https://www.google.com')
+    let certName = await cert.subject.CN;
+    let validFrom = await cert.valid_from;
+    let validTo = await cert.valid_to;
+    let certDetails = {
+        certName, validFrom, validTo
+    }
+    res.send(`hello this is my cert ${JSON.stringify(certDetails)}`);
 })
 
 app.listen(PORT, ()=>{
