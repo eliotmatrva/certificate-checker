@@ -12,34 +12,39 @@ app.use(express.urlencoded({
 
 app.use(express.static('public'));
 const PORT = 3000;
-/*
-function getAllCertDetails(){
-    for (let i = 0; i < domainList.length; i++){
-        retrieveCertDetails(domainList[i]);        
-    }
-}
 
-// console.log(JSON.stringify(domainList));
+// Maintain a hash of all connected sockets
+var sockets = {}, nextSocketId = 0;
+server.on('connection', function (socket) {
+  // Add a newly connected socket
+  var socketId = nextSocketId++;
+  sockets[socketId] = socket;
+  console.log('socket', socketId, 'opened');
 
-async function retrieveCertDetails(site){
-    let cert;
-    sslCertificate.get(site.domain).then(function (certificate) {
-        let name = site.name;
-        console.log(`----- Cert Details for ${name} -----`);
-        console.log(certificate.subject);
-        console.log(certificate.issuer);
-        console.log(certificate.valid_from);
-        console.log(`valid to ${certificate.valid_to}`);
-        console.log(`----------------------END-------------------------`);
-        console.log(`                                                  `);
-        cert = certificate;
-      });
-    console.log(`i did it ${cert}`);
-    return cert;
-}
+  // Remove the socket when it closes
+  socket.on('close', function () {
+    console.log('socket', socketId, 'closed');
+    delete sockets[socketId];
+  });
 
-getAllCertDetails();
-*/
+  // Extend socket lifetime for demo purposes
+  socket.setTimeout(4000);
+});
+
+// Count down from 10 seconds
+(function countDown (counter) {
+  console.log(counter);
+  if (counter > 0)
+    return setTimeout(countDown, 1000, counter - 1);
+
+  // Close the server
+  server.close(function () { console.log('Server closed!'); });
+  // Destroy all open sockets
+  for (var socketId in sockets) {
+    console.log('socket', socketId, 'destroyed');
+    sockets[socketId].destroy();
+  }
+})(10);
 
 async function getPeerCert(resSocket) {
     let cert = await resSocket.getPeerCertificate();
@@ -52,14 +57,11 @@ async function getCert(domain) {
         let data ='';
 
         https.get(domain, res => {
-            res.on('data', chunk => {
-                data += chunk;
-                console.log(chunk);
-            });
+            res.on('data', chunk => { data += chunk});
             res.on('end', () => {
-                console.log(data);
                 resolve(res.socket.getPeerCertificate());
             })
+            
         })
     })
 }
@@ -113,6 +115,6 @@ app.get('/api/getCerts', async (req, res) => {
     res.send(`hello this is my cert ${JSON.stringify(certDetails)}`);
 })
 
-app.listen(PORT, ()=>{
+let server = app.listen(PORT, ()=>{
     console.log(`app running on port ${PORT}`);
 })

@@ -47,21 +47,16 @@ async function getPeerCert(resSocket) {
     return cert;
 }
 
-async function getCert(domain) {
-    return new Promise((resolve) => {
-        let data ='';
-
-        https.get(domain, res => {
-            res.on('data', chunk => {
-                data += chunk;
-                console.log(chunk);
-            });
-            res.on('end', () => {
-                console.log(data);
-                resolve(res.socket.getPeerCertificate());
-            })
+function getCert(options) {
+    let daCert = new Promise;
+    https.get(options, res => {
+        let data = '';
+        res.on('data', chunk => { data += chunk });
+        res.on('end', async () => {
+            daCert = await getPeerCert(res.socket);
         })
     })
+    return daCert;
 }
 
 // async function extractCertDetails(domain){
@@ -81,6 +76,12 @@ async function getCert(domain) {
 async function getAllCerts(){
     let allCerts = [];
     for await (const domain of domainList) {
+        let options = {
+            hostname : domain.domain,
+            agent : false,
+            rejectUnauthorized : false,
+            ciphers : 'ALL'
+        }
         let thisCert = await getCert(domain.domain);
         console.log(thisCert);
         allCerts.push(thisCert);

@@ -1,10 +1,10 @@
 [
     {
-        "name": "datapass UAT",
-        "domain": "https://uat.etravelprotection.com"
+        "name": "google",
+        "domain": "https://google.com"
     },
     {
-        "name": "datapass PROD",
-        "domain": "https://etravelprotection.com"
+        "name": "yahoo",
+        "domain": "https://yahoo.com"
     }
 ]
