@@ -80,7 +80,7 @@ async function getAllCerts(){
         let thisCert = await getCert(domain.domain);
         allCerts.push(thisCert);
     }
-    console.log(allCerts);
+    //console.log(allCerts);
     return allCerts;
 }
     
