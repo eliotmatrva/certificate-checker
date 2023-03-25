@@ -1,26 +1,26 @@
 [
     {
         "name": "datapass UAT",
-        "domain": "https://uat.etravelprotection.com"
+        "domain": "uat.etravelprotection.com"
     },
     {
         "name": "datapass PROD",
-        "domain": "https://etravelprotection.com"
+        "domain": "etravelprotection.com"
     },
     {
         "name": "quote & decisions - optimizations UAT",
-        "domain": "https://uatgateway.americas.allianz-assistance.com"
+        "domain": "uatgateway.americas.allianz-assistance.com"
     },
     {
         "name": "quote & decisions - optimizations PROD",
-        "domain": "https://gateway.americas.allianz-assistance.com"
+        "domain": "gateway.americas.allianz-assistance.com"
     },
     {
         "name": "purchase Marriott UAT",
-        "domain": "https://pg-uat.allianzpartnergateway.com"
+        "domain": "pg-uat.allianzpartnergateway.com"
     },
     {
         "name": "purchase Marriott PROD",
-        "domain": "https://www.pg.allianzpartnergateway.com"
+        "domain": "www.pg.allianzpartnergateway.com"
     }
 ]

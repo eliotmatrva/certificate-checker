@@ -4,7 +4,7 @@ const fs = require('fs');
 // const sslCertificate = require('get-ssl-certificate');
 const express = require('express');
 const app = express();
-const domainList = require('./domains2.json');
+const domainList = require('./domains.json');
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -116,18 +116,45 @@ let domains = [
 
 async function getAllCerts(){
     let certList = [];
-    for await (const domain of domains){
-        certList.push(await getCert(domain));
+    for await (const domain of domainList){
+        certList.push(await getCert(domain.domain));
 }
-    writeCertsFile(certList);
+    
     console.log(certList);
-    return certList;
+    let refinedCertList = [];
+    certList.map(cert => {
+        refinedCertList.push({ 'site' : cert.subject.CN, 'valid from' :cert.valid_from, 'valid to' : cert.valid_to });
+    });
+    writeCertsFile(refinedCertList);
+    console.log(`These are the basic cert details:
+        ${JSON.stringify(refinedCertList)}`)
+    return refinedCertList;
+    
 }
 
-getAllCerts();
+// getAllCerts();
 // getCert('bing.com');
 
+app.get('/api/allCerts', (req, res) => {
+    let cachedCertData = fs.readFileSync('./certs.json');
+    console.log(`Received Get Request from
+        ${req.headers}`);
+    console.log('sending cached cert data');
+    res.send(cachedCertData);
+});
+
+app.get('/api/helloWorld', (req, res) => {
+    let ip = req.header('x-forwarded-for') || req.socket.remoteAddress;
+    console.log(`Received Get Request from
+        ${ip}`);
+    res.send('hello world');
+});
+
+setInverVal(() => {
+    fs.writeFileSync('./app.log', ` ${new Date} : hopefully the cert update occurred.`)
+    getAllCerts();
+}, 60000)
 
 app.listen(PORT, ()=>{
     console.log(`app running on port ${PORT}`);
-})
+});
