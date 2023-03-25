@@ -150,10 +150,12 @@ app.get('/api/helloWorld', (req, res) => {
     res.send('hello world');
 });
 
-setInverVal(() => {
-    fs.writeFileSync('./app.log', ` ${new Date} : hopefully the cert update occurred.`)
-    getAllCerts();
-}, 60000)
+let certRefresh = setInterval(async () => {
+    let certUpdate = await getAllCerts();
+    fs.appendFileSync('./app.log', ` ${new Date} : hopefully the cert update occurred.
+    Here's what we got!
+    ${JSON.stringify(certUpdate)}`);
+}, 30000);
 
 app.listen(PORT, ()=>{
     console.log(`app running on port ${PORT}`);
