@@ -48,16 +48,30 @@ async function getPeerCert(resSocket) {
 }
 
 function getCert(options) {
-    let daCert = new Promise;
-    https.get(options, res => {
+    let daCert;
+    let req = https.get(options, res => {
         let data = '';
-        res.on('data', chunk => { data += chunk });
-        res.on('end', async () => {
-            daCert = await getPeerCert(res.socket);
-        })
+        res.on('data', async chunk => { data += chunk });
+        res.on('end', () => 
+            new Promise((resolve, reject) => {
+                Promise.resolve(res.socket.getPeerCertificate());
+            })
+        );
     })
     return daCert;
 }
+
+// function getCert(options) {
+//     let daCert = new Promise;
+//     https.get(options, res => {
+//         let data = '';
+//         res.on('data', chunk => { data += chunk });
+//         res.on('end', async () => {
+//             daCert = await getPeerCert(res.socket);
+//         })
+//     })
+//     return daCert;
+// }
 
 // async function extractCertDetails(domain){
 //     return await getCert(domain);

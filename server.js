@@ -1,3 +1,4 @@
+const tls = require('tls');
 const https = require("https");
 //const fetch = require("isomorphic-fetch");
 // const sslCertificate = require('get-ssl-certificate');
@@ -47,18 +48,27 @@ async function getPeerCert(resSocket) {
     return cert;
 }
 
+function closeResSocket(resSocket){
+    resSocket.destroy();
+}
+
 async function getCert(domain) {
+    let options = {
+        headers: {
+            Connection : 'close'
+        }
+    }
     return new Promise((resolve) => {
         let data ='';
 
         https.get(domain, res => {
             res.on('data', chunk => {
-                data += chunk;
-                console.log(chunk);
+                data += chunk.toString('utf8');
             });
             res.on('end', () => {
-                console.log(data);
+                //console.log(data);
                 resolve(res.socket.getPeerCertificate());
+                res.close();
             })
         })
     })
