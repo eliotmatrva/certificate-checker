@@ -1,0 +1,17 @@
+table, tr, td {
+    border: 1px solid lightgray;
+}
+
+.tableHeader {
+    background-color: darkslategray;
+    color: lightskyblue;
+}
+
+.tableInput {
+    width: 100%;
+    max-width: 100%;
+}
+
+.certRow {
+    border: 6px solid #00ff9b;
+}
