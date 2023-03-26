@@ -91,7 +91,7 @@ async function getAllCerts(){
     console.log(certList);
     let refinedCertList = [];
     certList.map(cert => {
-        refinedCertList.push({ 'site' : cert.subject.CN, 'valid from' :cert.valid_from, 'valid to' : cert.valid_to });
+        refinedCertList.push({ 'site' : cert.subject.CN, 'validFrom' :cert.valid_from, 'validTo' : cert.valid_to });
     });
     writeCertsFile(refinedCertList);
     console.log(`These are the basic cert details:
@@ -118,12 +118,22 @@ app.get('/api/helloWorld', (req, res) => {
     res.send('hello world');
 });
 
-let certRefresh = setInterval(async () => {
-    let certUpdate = await getAllCerts();
-    fs.appendFileSync('./app.log', ` ${new Date} : hopefully the cert update occurred.
-    Here's what we got!
-    ${JSON.stringify(certUpdate)}`);
-}, 30000);
+function logPrep(certList){
+  return [{
+    logBody:{
+      timeStamp: new Date,
+      message: 'Certificate updated performed'
+    },
+      certList
+    }
+  ];
+}
+
+// let certRefresh = setInterval(async () => {
+//     let certUpdate = await getAllCerts();
+//     let logEntry = logPrep(certUpdate);
+//     fs.appendFileSync('./appLog.json', JSON.stringify(logEntry));
+// }, 30000);
 
 app.listen(PORT, ()=>{
     console.log(`app running on port ${PORT}`);
