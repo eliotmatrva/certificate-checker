@@ -45,14 +45,6 @@ function get(url, timeout, detailed) {
     protocol: 'https:'
   }
   
-async function getSomething(){
-  return await https.get('https://google.com');
-}
-
-async function fetchSomething(){
-  return await fetch('https://google.com');
-}
-
   return new Promise(function(resolve, reject) {
     var req = handleRequest(options, detailed, resolve, reject);
     
@@ -100,13 +92,8 @@ async function getAllCerts(){
     
 }
 
-// getAllCerts();
-// getCert('bing.com');
-
 app.get('/api/allCerts', (req, res) => {
     let cachedCertData = fs.readFileSync('./certs.json');
-    console.log(`Received Get Request from
-        ${req.headers}`);
     console.log('sending cached cert data');
     res.send(cachedCertData);
 });
@@ -128,6 +115,8 @@ function logPrep(certList){
     }
   ];
 }
+
+getAllCerts();
 
 // let certRefresh = setInterval(async () => {
 //     let certUpdate = await getAllCerts();
