@@ -19,7 +19,6 @@ function writeCertsFile(content) {
     fs.writeFileSync('./certs.json', JSON.stringify(content));
 }
 
-
 function isEmpty(object) {
     for (var prop in object) {
       if (object.hasOwnProperty(prop)) return false;
@@ -28,85 +27,54 @@ function isEmpty(object) {
     return true;
   }
   
-  function pemEncode(str, n) {
-    var ret = [];
+function handleRequest(options, detailed = false, resolve, reject) {
+  return https.get(options, function(res) {
+    var certificate = res.socket.getPeerCertificate(detailed);
+      resolve(certificate);
+  });
+}
   
-    for (var i = 1; i <= str.length; i++) {
-      ret.push(str[i - 1]);
-      var mod = i % n;
-  
-      if (mod === 0) {
-        ret.push('\n');
-      }
-    }
-  
-    var returnString = `-----BEGIN CERTIFICATE-----\n${ret.join('')}\n-----END CERTIFICATE-----`;
-  
-    return returnString;
-  }
-  
-  function getOptions(url, port, protocol) {
-    return {
-      hostname: url,
-      agent: false,
-      rejectUnauthorized: false,
-      ciphers: 'ALL',
-      port,
-      protocol
-    };
-  }
-  
-  function validateUrl(url) {
-    if (url.length <= 0 || typeof url !== 'string') {
-      throw Error('A valid URL is required');
-    }
-  }
-  
-  function handleRequest(options, detailed = false, resolve, reject) {
-    return https.get(options, function(res) {
-      var certificate = res.socket.getPeerCertificate(detailed);
-  
-      if (isEmpty(certificate) || certificate === null) {
-        reject({ message: 'The website did not provide a certificate' });
-      } else {
-        if (certificate.raw) {
-          certificate.pemEncoded = pemEncode(certificate.raw.toString('base64'), 64);
-        }
-        resolve(certificate);
-      }
-    });
-  }
-  
-  function get(url, timeout, port, protocol, detailed) {
-    validateUrl(url);
-  
-    port = port || 443;
-    protocol = protocol || 'https:';
-  
-    var options = getOptions(url, port, protocol);
-  
-    return new Promise(function(resolve, reject) {
-      var req = handleRequest(options, detailed, resolve, reject);
-  
-      if (timeout) {
-        req.setTimeout(timeout, function() {
-          reject({ message: 'Request timed out.' });
-          req.destroy();
-        });
-      }
-  
-      req.on('error', function(e) {
-        reject(e);
-      });
-  
-      req.end();
-    });
-  }
+function get(url, timeout, detailed) {
 
-  async function getCert(domain){
-    return await get(domain);
-    // console.log(cert);
+  let options = {
+    hostname: url,
+    agent: false,
+    rejectUnauthorized: false,
+    ciphers: 'ALL',
+    port: 443,
+    protocol: 'https:'
   }
+  
+async function getSomething(){
+  return await https.get('https://google.com');
+}
+
+async function fetchSomething(){
+  return await fetch('https://google.com');
+}
+
+  return new Promise(function(resolve, reject) {
+    var req = handleRequest(options, detailed, resolve, reject);
+    
+    if (timeout) {
+      req.setTimeout(timeout, function() {
+        reject({ message: 'Request timed out.' });
+        req.destroy();
+      });
+    }
+
+    req.on('error', function(e) {
+      reject(e);
+    });
+
+    req.end();
+  });
+}
+
+async function getCert(domain){
+  return await get(domain, 10000, false);
+  // console.log(cert);
+}
 
 let domains = [
     'google.com',
