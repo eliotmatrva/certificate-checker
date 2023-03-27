@@ -47,9 +47,8 @@ async function getPeerCert(resSocket) {
     return cert;
 }
 
-function getCert(options) {
-    let daCert;
-    let req = https.get(options, res => {
+async function getCert(options) {
+    let daCert = await https.get(options, res => {
         let data = '';
         res.on('data', async chunk => { data += chunk });
         res.on('end', () => 

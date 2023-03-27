@@ -54,25 +54,37 @@ function closeResSocket(resSocket){
 
 async function getCert(domain) {
     let options = {
-        headers: {
-            Connection : 'close'
-        }
-    }
-    return new Promise((resolve) => {
+        hostname: domain,
+        agent: false,
+        rejectUnauthorized: false,
+        ciphers: 'ALL',
+        port: 443,
+        protocol: 'https:',
+        //Connection: 'close'
+      }
+    
+    let promisedData = new Promise((resolve, reject) => {
         let data ='';
-
-        https.get(domain, res => {
-            res.on('data', chunk => {
-                data += chunk.toString('utf8');
-            });
+        let httpsRequest = https.get(domain, res => {
+            res.on('data', chunk => { data += chunk });
             res.on('end', () => {
-                //console.log(data);
                 resolve(res.socket.getPeerCertificate());
-                res.close();
             })
         })
     })
+    let result = await promisedData;
+    return result;
+    //console.log(promisedData);
 }
+
+// let getTheCert = setInterval(async () => {
+//     let res = await getCert('https://google.com');
+//     console.log(res);
+//     }, 10000);
+
+// let getTheCert = setInterval(async () => {
+//     getCert('https://google.com');
+// },10000);
 
 // async function extractCertDetails(domain){
 //     return await getCert(domain);
@@ -100,7 +112,8 @@ async function getAllCerts(){
     return allCerts;
 }
     
-// getAllCerts();
+//getAllCerts();
+// getCert('https://google.com')
 
 app.get('/api/helloWorld', (req, res) => {
     res.send(`<div> Welcome to your barebones Node App</div>`);
@@ -113,14 +126,14 @@ app.get('/api/allCerts', async (req, res) => {
 })
 
 app.get('/api/getCerts', async (req, res) => {
-    let cert = await getCert('https://www.google.com')
-    let certName = await cert.subject.CN;
-    let validFrom = await cert.valid_from;
-    let validTo = await cert.valid_to;
-    let certDetails = {
-        certName, validFrom, validTo
-    }
-    res.send(`hello this is my cert ${JSON.stringify(certDetails)}`);
+    let cert = await getCert('https://google.com')
+    // let certName = await cert.subject.CN;
+    // let validFrom = await cert.valid_from;
+    // let validTo = await cert.valid_to;
+    // let certDetails = {
+    //     certName, validFrom, validTo
+    // }
+    res.send(`${JSON.stringify(cert)}`);
 })
 
 app.listen(PORT, ()=>{

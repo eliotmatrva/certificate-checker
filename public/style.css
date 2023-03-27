@@ -1,10 +1,10 @@
 table, tr, td {
-    border: 1px solid lightgray;
+    border: 1px solid #003781;
 }
 
 .tableHeader {
-    background-color: darkslategray;
-    color: lightskyblue;
+    background-color: #414141;
+    color: #dfeff2;
 }
 
 .tableInput {
@@ -13,5 +13,5 @@ table, tr, td {
 }
 
 .certRow {
-    border: 6px solid #00ff9b;
+    border: 6px solid #dfeff2;
 }
