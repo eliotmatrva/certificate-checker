@@ -1,4 +1,4 @@
-const tls = require('tls');
+//const tls = require('tls');
 const https = require("https");
 //const fetch = require("isomorphic-fetch");
 // const sslCertificate = require('get-ssl-certificate');
@@ -60,8 +60,7 @@ async function getCert(domain) {
         ciphers: 'ALL',
         port: 443,
         protocol: 'https:',
-        Connection: 'close',
-        Cache-Control: 'no-cache'
+        Connection: 'close'
       }
     
     let promisedData = new Promise((resolve, reject) => {
