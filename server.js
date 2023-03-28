@@ -60,7 +60,8 @@ async function getCert(domain) {
         ciphers: 'ALL',
         port: 443,
         protocol: 'https:',
-        //Connection: 'close'
+        Connection: 'close',
+        Cache-Control: 'no-cache'
       }
     
     let promisedData = new Promise((resolve, reject) => {
@@ -77,10 +78,10 @@ async function getCert(domain) {
     //console.log(promisedData);
 }
 
-// let getTheCert = setInterval(async () => {
-//     let res = await getCert('https://google.com');
-//     console.log(res);
-//     }, 10000);
+let getTheCert = setInterval(async () => {
+    let res = await getCert('https://google.com');
+    console.log(res);
+    }, 10000);
 
 // let getTheCert = setInterval(async () => {
 //     getCert('https://google.com');

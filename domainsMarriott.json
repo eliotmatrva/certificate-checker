@@ -1,0 +1,26 @@
+[
+    {
+        "name": "datapass UAT",
+        "domain": "uat.etravelprotection.com"
+    },
+    {
+        "name": "datapass PROD",
+        "domain": "etravelprotection.com"
+    },
+    {
+        "name": "quote & decisions - optimizations UAT",
+        "domain": "uatgateway.americas.allianz-assistance.com"
+    },
+    {
+        "name": "quote & decisions - optimizations PROD",
+        "domain": "gateway.americas.allianz-assistance.com"
+    },
+    {
+        "name": "purchase Marriott UAT",
+        "domain": "pg-uat.allianzpartnergateway.com"
+    },
+    {
+        "name": "purchase Marriott PROD",
+        "domain": "www.pg.allianzpartnergateway.com"
+    }
+]

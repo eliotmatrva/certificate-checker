@@ -21,14 +21,16 @@ async function filterCertData(certs){
 }
 
 function createTableRow(cert) {
-    var table = document.getElementById('certTable');
+    // var table = document.getElementById('certTable');
     var tableBody = document.getElementById("tableBody");
     var row = tableBody.insertRow(0);
     row.id = `site_${cert.site}`
     row.classList.add("certRow");
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
+    var cell0 = row.insertCell(0);
+    var cell1 = row.insertCell(1);
+    var cell2 = row.insertCell(2);
+    var cell3 = row.insertCell(3);
+    cell0.innerHTML = cert.name;
     cell1.innerHTML = cert.site;
     cell2.innerHTML = cert.validFrom;
     cell3.innerHTML = cert.validTo;

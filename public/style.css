@@ -1,3 +1,17 @@
+body {
+    font-family: Montserrat;
+}
+
+.logo {
+    width: 30%;
+}
+
+h1 {
+    width: 50%;
+}
+
+
+
 table, tr, td {
     border: 1px solid #003781;
 }
