@@ -12,7 +12,7 @@ app.use(express.urlencoded({
 }));
 
 app.use(express.static('public'));
-const PORT = 3000;
+const PORT = process.evn.PORT || 3000;
 
 function writeCertsFile(content) {
     console.log('trying to writeFile');

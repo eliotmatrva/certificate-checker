@@ -8,17 +8,23 @@ body {
 
 h1 {
     width: 50%;
+    color: #00908d
 }
 
 
 
-table, tr, td {
+table {
     border: 1px solid #003781;
+    color: #003781
+}
+
+tr, td {
+    border: 1px solid #b5dae6
 }
 
 .tableHeader {
     background-color: #414141;
-    color: #dfeff2;
+    color: #b5dae6;
 }
 
 .tableInput {
@@ -27,5 +33,5 @@ table, tr, td {
 }
 
 .certRow {
-    border: 6px solid #dfeff2;
+    border: 6px solid #b5dae6;
 }
