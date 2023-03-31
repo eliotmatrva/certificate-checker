@@ -46,11 +46,11 @@ https.get('https://google.com', (res) => {
     console.log(res.socket);
 })
 
-// fetch('https://google.com')
-//     .then(res => {
-//         console.log(`-------------------------------- fetch response ----------------------------------------`)
+//  fetch('https://google.com')
+//      .then(res => {
+//          console.log(`-------------------------------- fetch response ----------------------------------------`)
 //         console.log(res);
-//     })
+//      })
 
 async function getPeerCert(resSocket) {
     let cert = await resSocket.getPeerCertificate();

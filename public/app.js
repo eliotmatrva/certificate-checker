@@ -1,8 +1,8 @@
 
 
 async function fetchCerts(){
-    //return await fetch('http://localhost:3000/api/allCerts')
-    return await fetch('https://lobster-app-7m4kq.ondigitalocean.app/api/allCerts')
+    return await fetch('http://localhost:3000/api/allCerts')
+    //return await fetch('https://lobster-app-7m4kq.ondigitalocean.app/api/allCerts')
 
     // let certs = JSON.stringify(fetched);
 }

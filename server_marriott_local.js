@@ -34,7 +34,7 @@ function handleRequest(options, detailed = false, resolve, reject) {
   });
 }
   
-function get(domain, timeout, detailed) {
+async function get(domain, timeout, detailed) {
 
   let options = {
     hostname: domain.domain,
