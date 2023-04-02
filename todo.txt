@@ -1,9 +1,19 @@
-> Backend Stuff
->> fix async cludginess
->> change retrieveCertDetails to return content that can be consumed for front-end use
+> Back-end Stuff
+>> Implement error handling
+>>> handle timeouts
+>>> handling https.get errors & response messages
 >> Get full list of allianz endpoints
 >> implement fs to save & update all retrieved cert details to domains.json
-> build front end
->> grid to display cert details, default sort on "valid to" property
+>> add functionality to export grid to excel
+> Front-end Stuff
 >> Button to refresh cert details
 >> form to add new sites
+> Testing
+>> Build out tests
+
+DONE
+> Back-end Stuff
+>> fix async cludginess
+>> change retrieveCertDetails to return content that can be consumed for front-end use
+> Front-end Stuff
+>> grid to display cert details, default sort on "valid to" property
