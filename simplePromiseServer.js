@@ -1,6 +1,4 @@
 const https = require("https");
-//const fetch = require("isomorphic-fetch");
-// const sslCertificate = require('get-ssl-certificate');
 const express = require('express');
 const app = express();
 const domainList = require('./domains2.json');
@@ -34,12 +32,13 @@ async function getCerts(){
     for (const domain of domainList){
         let cert = await getCert(domain.domain);
         console.log(cert);
+        return cert;
     }
 }
 
-let certRefresh = setInterval(() => {
-    getCerts();
-}, 10000);
+// let certRefresh = setInterval(() => {
+//     getCerts();
+// }, 10000);
 
 // let scheduler = setInterval(() => {
 //     promisedCert()
@@ -50,8 +49,9 @@ let certRefresh = setInterval(() => {
 
 
 
-app.get('/api/getCerts', (req, res) => {
-    res.send()
+app.get('/api/getCerts', async (req, res) => {
+    let certs = await getCerts();
+    res.send(certs);
 })
 
 app.listen(PORT, ()=>{
