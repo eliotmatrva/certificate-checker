@@ -24,21 +24,24 @@ function getCert(url) {
     return new Promise((resolve, reject) => {
         https.get(options, res => {
             resolve(res.socket.getPeerCertificate());
-        });        
-    })
+        })
+        // .on('error', (e) => {
+        //     { error: e }
+        // });        
+    })  
 }
 
 async function getCerts(){
     for (const domain of domainList){
         let cert = await getCert(domain.domain);
         console.log(cert);
-        return cert;
+        // return cert;
     }
 }
 
-// let certRefresh = setInterval(() => {
-//     getCerts();
-// }, 10000);
+let certRefresh = setInterval(() => {
+    getCerts();
+}, 10000);
 
 // let scheduler = setInterval(() => {
 //     promisedCert()
@@ -48,7 +51,7 @@ async function getCerts(){
 // }, 5000);
 
 
-
+// need to add return cert to getCerts for app.get('/api/getCerts... to work
 app.get('/api/getCerts', async (req, res) => {
     let certs = await getCerts();
     res.send(certs);
