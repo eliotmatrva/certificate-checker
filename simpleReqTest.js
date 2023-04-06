@@ -21,6 +21,12 @@ function getCert(url) {
         protocol: 'https:'
       }
 
+    // return new Promise((resolve, reject) => {
+    //     let req = https.request(options);
+    //     return req.on('response', (res) => {
+    //         resolve(req.getPeerCertificate());
+    //     });
+    // });
     return new Promise((resolve, reject) => {
         https.get(options, res => {
             resolve(res.socket.getPeerCertificate());
@@ -29,12 +35,13 @@ function getCert(url) {
 }
 
 async function getCerts(){
-    for (const domain of domainList){
+    console.log(`START`);
+    await domainList.forEach(async domain => {
         let cert = await getCert(domain.domain);
         console.log(cert);
+    })
+    console.log(`END`);       
         // return cert;
-    }
-    // code here WILL run after the for of loop
 }
 
 let certRefresh = setInterval(() => {

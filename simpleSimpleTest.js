@@ -30,7 +30,8 @@ function getCert(url) {
                 resolve(res.socket.getPeerCertificate());
             } else {
                 reject(() => {
-                    statusCode;
+                    console.log(statusCode);
+                    return statusCode;
                 })
             }            
         })

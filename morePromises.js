@@ -28,14 +28,19 @@ function getCert(url) {
     })  
 }
 
-async function getCerts(){
-    for (const domain of domainList){
-        let cert = await getCert(domain.domain);
+function getCerts(){
+    let promises = [];
+  
+    domainList.forEach(domain => {
+      promises.push(getCert(domain.domain).then(cert => {
         console.log(cert);
-        // return cert;
-    }
-    // code here WILL run after the for of loop
-}
+      }));
+    });
+  
+    Promise.all(promises).then(() => {
+      console.log(`should show after loop`);
+    });
+  }
 
 let certRefresh = setInterval(() => {
     getCerts();
